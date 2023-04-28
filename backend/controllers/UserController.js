@@ -141,6 +141,10 @@ module.exports = class UserController {
     const { name, email, phone, password, confirmpassword } = req.body;
     let image = "";
 
+    if (req.file) {
+      user.image = req.file.filename;
+    }
+
     // validations
     if (!name) {
       res.status(422).json({ message: "Por favor, insira um nome." });
@@ -171,7 +175,7 @@ module.exports = class UserController {
     if (password !== confirmpassword) {
       res.status(422).json({ message: `As senhas não conferem.` });
       return;
-    } else if (password === confirmpassword && password !== null) {
+    } else if (password && password === confirmpassword) {
       // creating password
       const salt = await bcrypt.genSalt(12);
       const passwordHash = await bcrypt.hash(password, salt);

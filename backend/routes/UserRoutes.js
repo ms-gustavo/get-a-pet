@@ -4,12 +4,12 @@ const UserController = require("../controllers/UserController");
 const verifyToken = require("../helpers/verify-token");
 const { imageUpload } = require("../helpers/image-upload");
 
-router.post("/users/register", UserController.register);
-router.post("/users/login", UserController.login);
-router.get("/users/checkuser", UserController.checkUser);
-router.get("/users/:id", UserController.getUserById);
+router.post("/register", UserController.register);
+router.post("/login", UserController.login);
+router.get("/checkuser", UserController.checkUser);
+router.get("/:id", UserController.getUserById);
 router.patch(
-  "/users/edit/:id",
+  "/edit/:id",
   verifyToken,
   imageUpload.single("image"),
   UserController.editUser

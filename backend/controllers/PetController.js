@@ -292,4 +292,42 @@ module.exports = class PetController {
       message: `A visita foi agendada com sucesso, entre em contato com ${pet.user.name} pelo telefone ${pet.user.phone}`,
     });
   }
+
+  static async concludeAdoption(req, res) {
+    const id = req.params.id;
+
+    //check if pet exists
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({
+        message: `ID inválido!`,
+      });
+      return;
+    }
+
+    // check if pet exits
+    const pet = await Pet.findOne({ _id: id });
+    if (!pet) {
+      res.status(404).json({
+        message: `Pet inexistente`,
+      });
+      return;
+    }
+
+    // check if logged user registered the pet
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    if (pet.user._id.toString() !== user._id.toString()) {
+      res.status(422).json({
+        message: `Houve um problema em processar a sua solicitação! Tente novamente mais tarde.`,
+      });
+      return;
+    }
+    pet.available = false;
+    await Pet.findByIdAndUpdate(id, pet);
+
+    res.status(200).json({
+      message: `A adoção foi concluída com sucesso!`,
+    });
+  }
 };

@@ -30,7 +30,7 @@ const Pet = mongoose.model(
         required: true,
       },
       user: Object,
-      adpoter: Object,
+      adopter: Object,
     },
     { timestamps: true }
   )

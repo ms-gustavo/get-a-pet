@@ -118,6 +118,7 @@ module.exports = class PetController {
       res.status(404).json({
         message: `O pet não existe!`,
       });
+      return;
     }
 
     res.status(200).json({
@@ -159,6 +160,78 @@ module.exports = class PetController {
     await Pet.findByIdAndRemove(id);
     res.status(200).json({
       message: `Pet excluído com sucesso!`,
+    });
+  }
+
+  static async updatePet(req, res) {
+    const id = req.params.id;
+    const { name, age, weight, color, available } = req.body;
+    const images = req.files;
+
+    const updatedData = {};
+
+    // check if ID is valid
+    if (!ObjectId.isValid(id)) {
+      res.status(422).json({
+        message: `ID inválido!`,
+      });
+      return;
+    }
+
+    // check if pet exists
+    const pet = await Pet.findOne({ _id: new ObjectId(id) });
+    if (!pet) {
+      res.status(404).json({
+        message: `Pet inexistente`,
+      });
+      return;
+    }
+
+    // check if logged user registered the pet
+    const token = getToken(req);
+    const user = await getUserByToken(token);
+
+    if (pet.user._id.toString() !== user._id.toString()) {
+      res.status(422).json({
+        message: `Houve um problema em processar a sua solicitação! Tente novamente mais tarde.`,
+      });
+      return;
+    }
+
+    // validations
+    if (!name) {
+      return PetController.sendError(res, `O nome é obrigatório!`);
+    } else {
+      updatedData.name = name;
+    }
+    if (!age) {
+      return PetController.sendError(res, `A idade é obrigatória!`);
+    } else {
+      updatedData.age = age;
+    }
+    if (!weight) {
+      return PetController.sendError(res, `O peso é obrigatório!`);
+    } else {
+      updatedData.weight = weight;
+    }
+    if (!color) {
+      return PetController.sendError(res, `A cor é obrigatória!`);
+    } else {
+      updatedData.color = color;
+    }
+
+    if (images.length === 0) {
+      return PetController.sendError(res, `A imagem é obrigatória!`);
+    } else {
+      updatedData.images = [];
+      images.map((image) => {
+        updatedData.images.push(image.filename);
+      });
+    }
+
+    await Pet.findByIdAndUpdate(id, updatedData);
+    res.status(200).json({
+      message: `O pet foi atualizado!`,
     });
   }
 };

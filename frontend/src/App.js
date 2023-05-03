@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./components/layouts/Navbar";
 import Footer from "./components/layouts/Footer";
 import Container from "./components/layouts/Container";
+import Message from "./components/layouts/Message";
 
 // Pages
 import Home from "./components/pages/Auth/Home";
@@ -18,6 +19,7 @@ function App() {
     <Router>
       <UserProvider>
         <Navbar />
+        <Message />
         <Container>
           <Routes>
             <Route path="login" element={<Login />} />

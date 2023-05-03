@@ -37,6 +37,7 @@ module.exports = class UserController {
       res.status(422).json({
         message: "A senha e a confirmação de senha precisam ser iguais!",
       });
+      return;
     }
 
     // Check if User Exists

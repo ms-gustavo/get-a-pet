@@ -11,7 +11,7 @@ const Input = ({
   multiple,
 }) => {
   return (
-    <div className={styles.form}>
+    <div className={styles.form_control}>
       <label htmlFor={name}>{text}:</label>
       <input
         type={type}

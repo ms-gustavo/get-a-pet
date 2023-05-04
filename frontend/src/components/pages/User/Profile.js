@@ -6,6 +6,7 @@ import styles from "./Profile.module.css";
 
 import Input from "../../../components/forms/Input";
 import useFlashMessage from "../../../hooks/useFlashMessage";
+import RoundedImage from "../../layouts/RoundedImage";
 
 function Profile() {
   const { setFlashMessage } = useFlashMessage();
@@ -65,7 +66,7 @@ function Profile() {
       <div className={styles.profile_container}>
         <h1>Perfil</h1>
         {(user.image || preview) && (
-          <img
+          <RoundedImage
             src={
               preview
                 ? URL.createObjectURL(preview)

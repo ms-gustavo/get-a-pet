@@ -27,7 +27,7 @@ function Navbar() {
         ) : (
           <>
             <li>
-              <Link to="/login">Login</Link>
+              <Link to="/login">Entrar</Link>
             </li>
             <li>
               <Link to="/register">Cadastrar</Link>

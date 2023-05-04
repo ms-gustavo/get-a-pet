@@ -11,6 +11,7 @@ function Profile() {
   const { setFlashMessage } = useFlashMessage();
   const [user, setUser] = useState({});
   const [token] = useState(localStorage.getItem("token") || "");
+  const [preview, setPreview] = useState("");
 
   useEffect(() => {
     api
@@ -25,6 +26,7 @@ function Profile() {
   }, [token]);
 
   function onFileChange(e) {
+    setPreview(e.target.files[0]);
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   }
   function handleOnChange(e) {
@@ -62,7 +64,16 @@ function Profile() {
     <section>
       <div className={styles.profile_container}>
         <h1>Perfil</h1>
-        <p>Preview de Imagem</p>
+        {(user.image || preview) && (
+          <img
+            src={
+              preview
+                ? URL.createObjectURL(preview)
+                : `${process.env.REACT_APP_API}images/users/${user.image}`
+            }
+            alt={user.name}
+          />
+        )}
       </div>
       <form className={formStyles.form_container} onSubmit={handleSubmit}>
         <Input

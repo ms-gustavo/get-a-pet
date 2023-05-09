@@ -79,7 +79,18 @@ function MyPets() {
                     </button>
                   </>
                 ) : (
-                  <p>Pet já adotado</p>
+                  <>
+                    <p>
+                      Pet já adotado
+                      <button
+                        onClick={() => {
+                          removePet(pet._id);
+                        }}
+                      >
+                        Excluir
+                      </button>
+                    </p>
+                  </>
                 )}
               </div>
             </div>
